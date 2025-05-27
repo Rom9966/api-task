@@ -83,7 +83,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = $this->productRepository->paginate();
-        return $this->paginatedResponse(
+        return $this->collectionResponse(
             new ProductCollection($products),
             'Products retrieved successfully'
         );
