@@ -102,6 +102,18 @@ Error responses:
 }
 ```
 
+## Pagination
+
+The `/api/products` endpoint supports pagination with the following query parameters:
+
+- `page`: The page number (default: 1)
+- `per_page`: The number of items per page (default: 10)
+
+Example request:
+```
+GET /api/products?page=2&per_page=20
+```
+
 ## Project Structure
 
 ```

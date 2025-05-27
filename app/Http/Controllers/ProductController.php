@@ -9,6 +9,7 @@ use App\Http\Resources\ProductCollection;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Traits\ApiResponse;
 use App\Constants\ApiResponseCode;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Info(
@@ -80,9 +81,11 @@ class ProductController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = $this->productRepository->paginate();
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page', 10);
+        $products = $this->productRepository->paginate($perPage, ['*'], 'page', $page);
         return $this->collectionResponse(
             new ProductCollection($products),
             'Products retrieved successfully'
@@ -202,19 +205,6 @@ class ProductController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="message", type="string", example="The requested product could not be found")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validation Error",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="The request data was invalid"),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(property="name", type="array", @OA\Items(type="string", example="The name field is required"))
-     *             )
      *         )
      *     )
      * )
